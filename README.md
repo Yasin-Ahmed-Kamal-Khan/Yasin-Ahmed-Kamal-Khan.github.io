@@ -33,13 +33,22 @@ The CV is fetched at build time (`prebuild` script → `scripts/fetch-cv.mjs`) f
 
 If the token is missing, the build still succeeds but `/cv.pdf` will be missing or stale — this is intentional so `next dev`/local builds aren't blocked. If the token is present but the fetch fails (bad token, renamed file, etc.), the build fails loudly instead of shipping a broken CV link.
 
+### Auto-redeploy on CV update
+
+Pushing a new CV to the `cv` repo alone doesn't touch this repo, so the deployed site would otherwise only pick it up on the next portfolio push. To close that gap, the `cv` repo has its own workflow (`notify-portfolio.yml`) that fires a `repository_dispatch` event (`cv-updated`) at this repo on every push to its `main` branch, which `deploy.yml` here is configured to accept as a trigger — so a CV push causes an automatic rebuild+redeploy within moments, without needing to touch the portfolio repo at all.
+
+This needs a **second** PAT, separate from `CV_REPO_PAT`:
+- Fine-grained, scoped to only the `portfolio` repo, with **Contents: Read and write** permission (required by GitHub's `dispatches` API endpoint).
+- Stored as a repo secret named `PORTFOLIO_DISPATCH_PAT` **in the `cv` repo** (not here — that's where the triggering workflow lives).
+
 ## Deployment
 
-Deploys automatically via `.github/workflows/deploy.yml` on push to `main` (or manually via workflow_dispatch).
+Deploys automatically via `.github/workflows/deploy.yml` on push to `main`, on a `cv-updated` dispatch from the `cv` repo (see above), or manually via workflow_dispatch.
 
 One-time setup in the GitHub repo settings:
 1. Settings → Secrets and variables → Actions → add `CV_REPO_PAT`.
 2. Settings → Pages → Source → set to **GitHub Actions**.
+3. In the **`cv`** repo's settings, add `PORTFOLIO_DISPATCH_PAT` as a secret (see above).
 
 ### Custom domain (later)
 
