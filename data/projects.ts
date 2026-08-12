@@ -8,7 +8,7 @@ export const projects: Project[] = [
       "This site — a Next.js + Tailwind portfolio with a typed, data-driven content layer.",
     tags: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     links: {
-      github: "https://github.com/Yasin-Ahmed-Kamal-Khan/portfolio",
+      github: "https://github.com/Yasin-Ahmed-Kamal-Khan/Yasin-Ahmed-Kamal-Khan.github.io",
     },
     startDate: "2026-08",
     featured: true,
