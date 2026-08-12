@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
+Personal portfolio site — Next.js (App Router, TypeScript) + Tailwind CSS, statically exported and deployed to GitHub Pages.
 
-First, run the development server:
+## Adding content
+
+All content lives in typed data files under `data/` — components never need editing to add a new entry:
+
+- `data/site-config.ts` — name, tagline, email, social links, nav sections
+- `data/experience.ts`, `data/projects.ts`, `data/education.ts`, `data/competitions.ts`, `data/volunteering.ts`
+
+Add an object to the relevant array (matching the interfaces in `data/types.ts`) and it appears on the site. A section only shows in the nav once its array has at least one entry.
+
+Link a project to the experience/competition/education/volunteering it was built for via `associatedWith`, referencing the other entry's `id`:
+
+```ts
+associatedWith: [{ kind: "competition", id: "some-competition-id" }],
+```
+
+## Local development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## CV
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The CV is fetched at build time (`prebuild` script → `scripts/fetch-cv.mjs`) from the private `Yasin-Ahmed-Kamal-Khan/cv` repo via the GitHub Contents API, written to `public/cv.pdf`, and never committed.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Requires a GitHub Personal Access Token (fine-grained, scoped to the `cv` repo, Contents: Read-only) with access to that repo.
+- **Locally:** put it in a gitignored `.env.local` as `CV_REPO_PAT=...`, then run `npm run fetch-cv:local` (or `npm run build`, which uses the plain `node scripts/fetch-cv.mjs` prebuild step and will warn + skip if no token is set — this is expected in local dev).
+- **In CI:** add it as a repository secret named `CV_REPO_PAT` (Settings → Secrets and variables → Actions).
 
-## Learn More
+If the token is missing, the build still succeeds but `/cv.pdf` will be missing or stale — this is intentional so `next dev`/local builds aren't blocked. If the token is present but the fetch fails (bad token, renamed file, etc.), the build fails loudly instead of shipping a broken CV link.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Deploys automatically via `.github/workflows/deploy.yml` on push to `main` (or manually via workflow_dispatch).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+One-time setup in the GitHub repo settings:
+1. Settings → Secrets and variables → Actions → add `CV_REPO_PAT`.
+2. Settings → Pages → Source → set to **GitHub Actions**.
 
-## Deploy on Vercel
+### Custom domain (later)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Once a domain is purchased:
+1. Add a `public/CNAME` file containing just the bare domain (e.g. `example.com`, no protocol/trailing slash).
+2. At the domain registrar, point DNS at GitHub Pages (A records to GitHub's Pages IPs for an apex domain, or a CNAME record to `yasin-ahmed-kamal-khan.github.io` for a subdomain like `www`).
+3. After DNS propagates, re-check "Enforce HTTPS" in Settings → Pages once the certificate provisions.

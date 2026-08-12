@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/fetch-cv.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "fetch-cv:local": "node --env-file=.env.local scripts/fetch-cv.mjs"
   },
   "dependencies": {
     "next": "16.3.0",
