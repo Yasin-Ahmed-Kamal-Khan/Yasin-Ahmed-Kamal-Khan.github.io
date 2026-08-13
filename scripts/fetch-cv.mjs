@@ -1,4 +1,4 @@
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 const REPO_OWNER = "Yasin-Ahmed-Kamal-Khan";
@@ -72,5 +72,6 @@ if (buffer.subarray(0, 4).toString() !== "%PDF") {
 }
 
 const outPath = fileURLToPath(new URL("../public/cv.pdf", import.meta.url));
+await mkdir(fileURLToPath(new URL("../public", import.meta.url)), { recursive: true });
 await writeFile(outPath, buffer);
 console.log(`[fetch-cv] Wrote public/cv.pdf from "${cvPath}" (${buffer.length} bytes)`);
