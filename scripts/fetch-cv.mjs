@@ -9,7 +9,7 @@ const token = process.env.CV_REPO_PAT;
 
 if (!token) {
   console.warn(
-    "[fetch-cv] CV_REPO_PAT not set — skipping CV fetch. /cv.pdf will be missing or stale in this build. " +
+    "[fetch-cv] CV_REPO_PAT not set — skipping CV fetch. /Yasin-Khan-CV.pdf will be missing or stale in this build. " +
       "Set CV_REPO_PAT in .env.local for local testing, or as a repo secret for CI.",
   );
   process.exit(0);
@@ -71,7 +71,7 @@ if (buffer.subarray(0, 4).toString() !== "%PDF") {
   process.exit(1);
 }
 
-const outPath = fileURLToPath(new URL("../public/cv.pdf", import.meta.url));
+const outPath = fileURLToPath(new URL("../public/Yasin-Khan-CV.pdf", import.meta.url));
 await mkdir(fileURLToPath(new URL("../public", import.meta.url)), { recursive: true });
 await writeFile(outPath, buffer);
-console.log(`[fetch-cv] Wrote public/cv.pdf from "${cvPath}" (${buffer.length} bytes)`);
+console.log(`[fetch-cv] Wrote public/Yasin-Khan-CV.pdf from "${cvPath}" (${buffer.length} bytes)`);

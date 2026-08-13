@@ -22,7 +22,7 @@ All page content lives in typed arrays under `data/` — shared interfaces in `d
 
 ## CV pipeline
 
-`scripts/fetch-cv.mjs` runs as the npm `prebuild` step, fetching the CV PDF from the private `Yasin-Ahmed-Kamal-Khan/cv` repo via the GitHub Contents API using `CV_REPO_PAT`, and writes it to `public/cv.pdf` (gitignored, regenerated every build). Missing token → warns and exits 0 (local dev shouldn't be blocked). Token present but request fails → exits 1 (CI should fail loudly rather than ship a stale/missing CV). See `README.md` for the full setup steps.
+`scripts/fetch-cv.mjs` runs as the npm `prebuild` step, fetching the CV PDF from the private `Yasin-Ahmed-Kamal-Khan/cv` repo via the GitHub Contents API using `CV_REPO_PAT`, and writes it to `public/Yasin-Khan-CV.pdf` (gitignored, regenerated every build). Missing token → warns and exits 0 (local dev shouldn't be blocked). Token present but request fails → exits 1 (CI should fail loudly rather than ship a stale/missing CV). See `README.md` for the full setup steps.
 
 ## Verifying changes
 

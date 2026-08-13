@@ -25,13 +25,13 @@ npm run dev
 
 ## CV
 
-The CV is fetched at build time (`prebuild` script → `scripts/fetch-cv.mjs`) from the private `Yasin-Ahmed-Kamal-Khan/cv` repo via the GitHub Contents API, written to `public/cv.pdf`, and never committed.
+The CV is fetched at build time (`prebuild` script → `scripts/fetch-cv.mjs`) from the private `Yasin-Ahmed-Kamal-Khan/cv` repo via the GitHub Contents API, written to `public/Yasin-Khan-CV.pdf`, and never committed.
 
 - Requires a GitHub Personal Access Token (fine-grained, scoped to the `cv` repo, Contents: Read-only) with access to that repo.
 - **Locally:** put it in a gitignored `.env.local` as `CV_REPO_PAT=...`, then run `npm run fetch-cv:local` (or `npm run build`, which uses the plain `node scripts/fetch-cv.mjs` prebuild step and will warn + skip if no token is set — this is expected in local dev).
 - **In CI:** add it as a repository secret named `CV_REPO_PAT` (Settings → Secrets and variables → Actions).
 
-If the token is missing, the build still succeeds but `/cv.pdf` will be missing or stale — this is intentional so `next dev`/local builds aren't blocked. If the token is present but the fetch fails (bad token, renamed file, etc.), the build fails loudly instead of shipping a broken CV link.
+If the token is missing, the build still succeeds but `/Yasin-Khan-CV.pdf` will be missing or stale — this is intentional so `next dev`/local builds aren't blocked. If the token is present but the fetch fails (bad token, renamed file, etc.), the build fails loudly instead of shipping a broken CV link.
 
 ### Auto-redeploy on CV update
 

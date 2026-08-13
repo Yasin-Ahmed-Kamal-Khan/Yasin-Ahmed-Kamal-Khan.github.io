@@ -37,7 +37,7 @@ yarn-error.log*
 .vercel
 
 # generated at build time from the private cv repo — see scripts/fetch-cv.mjs
-/public/cv.pdf
+/public/Yasin-Khan-CV.pdf
 
 # typescript
 *.tsbuildinfo
