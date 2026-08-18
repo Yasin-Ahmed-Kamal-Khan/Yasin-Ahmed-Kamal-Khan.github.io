@@ -38,7 +38,7 @@ export interface Experience {
 export interface Education {
   id: EntryId;
   institution: string;
-  qualification: string;
+  qualification?: string;
   startDate: string;
   endDate?: string;
   location?: string;

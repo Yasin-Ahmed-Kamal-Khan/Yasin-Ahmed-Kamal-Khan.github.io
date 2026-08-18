@@ -21,7 +21,7 @@ export function Education() {
             <>
               <div>
                 <h3 className="font-semibold text-foreground">
-                  {item.qualification}, {item.institution}
+                  {[item.qualification, item.institution].filter(Boolean).join(", ")}
                 </h3>
                 {item.location && (
                   <p className="mt-1 text-sm text-foreground/60">
