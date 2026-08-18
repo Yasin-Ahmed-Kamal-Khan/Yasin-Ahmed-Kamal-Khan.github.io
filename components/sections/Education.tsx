@@ -31,7 +31,7 @@ export function Education() {
                 {gradeEntries.length > 0 && (
                   <div className="mt-2">
                     <Grades>
-                      {gradeEntries.map(([, grade]) => grade).join(" · ")}
+                      {gradeEntries.map(([, grade]) => grade).join(" ")}
                     </Grades>
                   </div>
                 )}
