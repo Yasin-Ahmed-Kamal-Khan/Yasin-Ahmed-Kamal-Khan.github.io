@@ -1,7 +1,7 @@
 import { education } from "@/data/education";
 import { Section } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
-import { GradeBadge } from "@/components/ui/GradeBadge";
+import { Grades } from "@/components/ui/Grades";
 import { formatDateRange } from "@/lib/format";
 
 export function Education() {
@@ -12,7 +12,8 @@ export function Education() {
       <div className="flex flex-col gap-4">
         {education.map((item) => {
           const details = item.details ?? [];
-          const hasDetails = details.length > 0;
+          const gradeEntries = Object.entries(item.grades ?? {});
+          const isExpandable = gradeEntries.length > 0 || details.length > 0;
 
           // Shared between the interactive and plain-card rendering below,
           // so the header markup only has to be written once.
@@ -27,9 +28,11 @@ export function Education() {
                     {item.location}
                   </p>
                 )}
-                {item.grades && Object.keys(item.grades).length > 0 && (
+                {gradeEntries.length > 0 && (
                   <div className="mt-2">
-                    <GradeBadge>{Object.values(item.grades).join(" · ")}</GradeBadge>
+                    <Grades>
+                      {gradeEntries.map(([, grade]) => grade).join(" · ")}
+                    </Grades>
                   </div>
                 )}
               </div>
@@ -37,7 +40,7 @@ export function Education() {
                 <span className="text-sm text-foreground/60">
                   {formatDateRange(item.startDate, item.endDate)}
                 </span>
-                {hasDetails && (
+                {isExpandable && (
                   <ChevronIcon className="text-foreground/40 transition-transform group-hover:text-accent group-open:rotate-180" />
                 )}
               </div>
@@ -46,23 +49,44 @@ export function Education() {
 
           return (
             <Card key={item.id} padded={false}>
-              {hasDetails ? (
-                // Padding lives on <summary>/<ul> (not on Card) so the
-                // entire visible rectangle is clickable, not just the text.
+              {isExpandable ? (
+                // Padding lives on <summary>/the expanded body (not on Card)
+                // so the entire visible rectangle is clickable, not just the
+                // text.
                 <details className="group">
                   <summary className="flex cursor-pointer list-none items-start justify-between gap-4 p-5 [&::-webkit-details-marker]:hidden">
                     {header}
                   </summary>
-                  <ul className="list-inside list-disc space-y-1 border-t border-black/10 px-5 pt-3 pb-5 text-sm text-foreground/80 dark:border-white/10">
-                    {details.map((detail) => (
-                      <li key={detail}>{detail}</li>
-                    ))}
-                  </ul>
+                  <div className="border-t border-black/10 px-5 pt-3 pb-5 text-sm dark:border-white/10">
+                    {gradeEntries.length > 0 && (
+                      <dl className="space-y-1">
+                        {gradeEntries.map(([subject, grade]) => (
+                          <div
+                            key={subject}
+                            className="flex items-baseline justify-between gap-4"
+                          >
+                            <dt className="text-foreground/70">{subject}</dt>
+                            <dd className="font-mono text-foreground">{grade}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
+                    {details.length > 0 && (
+                      <ul
+                        className={`list-inside list-disc space-y-1 text-foreground/80 ${
+                          gradeEntries.length > 0 ? "mt-3" : ""
+                        }`}
+                      >
+                        {details.map((detail) => (
+                          <li key={detail}>{detail}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </details>
               ) : (
-                // No details to show — render the same header, but as a
-                // plain (non-interactive) block: no chevron, no cursor, no
-                // dropdown to open.
+                // Nothing to expand — render the same header, but as a plain
+                // (non-interactive) block: no chevron, no cursor, no dropdown.
                 <div className="flex items-start justify-between gap-4 p-5">
                   {header}
                 </div>
