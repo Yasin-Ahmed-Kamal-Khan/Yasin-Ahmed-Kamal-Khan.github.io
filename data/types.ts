@@ -42,6 +42,7 @@ export interface Education {
   startDate: string;
   endDate?: string;
   location?: string;
+  grades?: Record<string, string>; // subject -> grade, e.g. { Maths: "A*" }
   details?: string[];
 }
 
