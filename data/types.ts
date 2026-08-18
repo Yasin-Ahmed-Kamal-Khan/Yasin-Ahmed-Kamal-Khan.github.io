@@ -73,6 +73,7 @@ export interface SocialLink {
 export interface NavSection {
   id: string;
   label: string;
+  href: string; // "/experience" for a dedicated page, "/#cv" for an in-page anchor on the homepage
 }
 
 export interface SiteConfig {

@@ -9,12 +9,12 @@ export const siteConfig: SiteConfig = {
     // Add LinkedIn, etc. here as more links are needed.
   ],
   sections: [
-    { id: "experience", label: "Experience" },
-    { id: "projects", label: "Projects" },
-    { id: "education", label: "Education" },
-    { id: "competitions", label: "Competitions" },
-    { id: "volunteering", label: "Volunteering" },
-    { id: "cv", label: "CV" },
-    { id: "contact", label: "Contact" },
+    { id: "experience", label: "Experience", href: "/experience" },
+    { id: "projects", label: "Projects", href: "/projects" },
+    { id: "education", label: "Education", href: "/education" },
+    { id: "competitions", label: "Competitions", href: "/competitions" },
+    { id: "volunteering", label: "Volunteering", href: "/volunteering" },
+    { id: "cv", label: "CV", href: "/#cv" },
+    { id: "contact", label: "Contact", href: "/#contact" },
   ],
 };
