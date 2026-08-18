@@ -1,5 +1,6 @@
 import { siteConfig } from "@/data/site-config";
 import type { NavSection } from "@/data/types";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav({ sections }: { sections: NavSection[] }) {
   return (
@@ -8,18 +9,21 @@ export function Nav({ sections }: { sections: NavSection[] }) {
         <a href="#" className="font-semibold text-foreground">
           {siteConfig.name}
         </a>
-        <ul className="flex flex-wrap gap-4">
-          {sections.map((section) => (
-            <li key={section.id}>
-              <a
-                href={`#${section.id}`}
-                className="text-foreground/70 transition-colors hover:text-foreground"
-              >
-                {section.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center gap-4">
+          <ul className="flex flex-wrap gap-4">
+            {sections.map((section) => (
+              <li key={section.id}>
+                <a
+                  href={`#${section.id}`}
+                  className="text-foreground/70 transition-colors hover:text-accent"
+                >
+                  {section.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ThemeToggle />
+        </div>
       </nav>
     </header>
   );

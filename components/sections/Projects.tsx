@@ -40,7 +40,7 @@ export function Projects() {
                       href={project.links.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground underline underline-offset-2"
+                      className="text-foreground underline underline-offset-2 transition-colors hover:text-accent"
                     >
                       GitHub
                     </a>
@@ -50,7 +50,7 @@ export function Projects() {
                       href={project.links.live}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground underline underline-offset-2"
+                      className="text-foreground underline underline-offset-2 transition-colors hover:text-accent"
                     >
                       Live
                     </a>
@@ -60,7 +60,7 @@ export function Projects() {
                       href={project.links.writeup}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground underline underline-offset-2"
+                      className="text-foreground underline underline-offset-2 transition-colors hover:text-accent"
                     >
                       Write-up
                     </a>

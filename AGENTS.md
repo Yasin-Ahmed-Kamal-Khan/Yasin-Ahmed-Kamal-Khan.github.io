@@ -20,6 +20,17 @@ All page content lives in typed arrays under `data/` — shared interfaces in `d
 - `data/site-config.ts` holds site-wide info (name, tagline, email, social links, nav order).
 - A `Project` can reference another entry via `associatedWith: [{ kind: "competition" | "experience" | "education" | "volunteering", id }]`, resolved to a label by `data/resolve.ts` using the referenced entry's `id` — keep `id`s stable (kebab-case) since renames break the link silently otherwise.
 
+## Design system
+
+Style is minimal/technical: mostly monochrome, with a single blue accent reserved for interactive/emphasis elements (CTAs, links, the section-heading marker, nav hover). **Never hardcode a color, radius, or font — use the theme tokens.**
+
+- Tokens live in `app/globals.css`: `--background`, `--foreground`, `--accent`, `--accent-foreground`, redefined inside `.dark` for the dark variant, and exposed to Tailwind via the `@theme inline` block (so `bg-accent`, `text-foreground`, etc. work as utilities).
+- Dark mode is **class-based**, not just `prefers-color-scheme`: `@custom-variant dark (&:where(.dark, .dark *))` makes `dark:` utilities key off a `.dark` class on `<html>`. This is what lets `ThemeToggle` override the OS preference — a pure media-query approach can't do that.
+- `app/layout.tsx` inlines a small blocking `<script>` as the first child of `<body>` that sets `.dark` from `localStorage` (falling back to `matchMedia`) before first paint — removing it (or making it `next/script`, which defers) will reintroduce a flash of the wrong theme.
+- `components/layout/ThemeToggle.tsx` is the only piece of client-side (`"use client"`) interactivity in the app; it renders a neutral placeholder until mounted specifically to avoid a hydration mismatch (server can't know the visitor's stored preference).
+- Fonts: Geist Sans (`font-sans`, applied on `<body>`) for everything; Geist Mono (`font-mono`) is loaded but not yet used — reach for it for numeric/technical details (dates, tech tags) if a section calls for that texture, don't introduce a third font.
+- Accent usage should stay restrained (CTAs, hover states, the section marker dot) — if a whole block starts turning blue, that's a sign to dial it back rather than a sign to add more.
+
 ## CV pipeline
 
 `scripts/fetch-cv.mjs` runs as the npm `prebuild` step, fetching the CV PDF from the private `Yasin-Ahmed-Kamal-Khan/cv` repo via the GitHub Contents API using `CV_REPO_PAT`, and writes it to `public/Yasin-Khan-CV.pdf` (gitignored, regenerated every build). Missing token → warns and exits 0 (local dev shouldn't be blocked). Token present but request fails → exits 1 (CI should fail loudly rather than ship a stale/missing CV). See `README.md` for the full setup steps.

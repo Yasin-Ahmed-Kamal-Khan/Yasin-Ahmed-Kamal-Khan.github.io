@@ -8,7 +8,7 @@ export function Contact() {
         Feel free to reach out at{" "}
         <a
           href={`mailto:${siteConfig.email}`}
-          className="text-foreground underline underline-offset-2"
+          className="text-accent underline underline-offset-2 transition-colors hover:opacity-80"
         >
           {siteConfig.email}
         </a>
